@@ -1,0 +1,23 @@
+name: Selenium Test
+'on':
+  push:
+    branches:
+      - main
+  pull_request: null
+jobs:
+  selenium_test:
+    name: Run Selenium Tests
+    runs-on: ubuntu-latest
+    container:
+      image: 'maven:3.8.5-openjdk-17-slim'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set Up Maven Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: '${{ runner.os }}-maven-${{ hashFiles(''**/pom.xml'') }}'
+          restore-keys: '${{ runner.os }}-maven'
+      - name: Run Tests
+        run: mvn clean test
